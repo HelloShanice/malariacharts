@@ -1,0 +1,66 @@
+---
+title: "Malaria Insights"
+author: "Shi Yee"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+**Death rates of Continents across years**
+```{r echo = FALSE} 
+library(ggplot2)
+library(plotly)
+library(countrycode)
+
+#Import dataset
+data1 <- read.csv(file='D:/SUSS/Career/3.5/Private sector/SGH/Data/malaria_deaths.csv',sep = ',')
+#The malaria death rate (Id) is the number of deaths due to malaria (Deaths) divided by the total population (Pop) and multiplied by 100,000.
+#Id = (Deaths / Pop) * 100,000
+
+#using countrycode library to get continent of countries
+#https://stackoverflow.com/questions/47510141/get-continent-name-from-country-name-in-r
+data1$continent <- countrycode(sourcevar = data1[, "Entity"],
+origin = "country.name",
+destination = "continent")
+
+#Renaming column 4
+names(data1)[4] <- "Deaths"
+names(data1)[5] <- "Continents"
+#View(data1)
+
+###Chart1
+
+chart1 <- ggplot(data1, aes(x=Year, 
+                     y=Deaths, 
+                     color=Continents)) +
+  geom_point(size=3) +
+  labs(x = "Year",
+       y = "Deaths (standardized rate)",
+       color = "Continents") +
+  theme_bw()
+
+ggplotly(chart1)
+```
+**Death rates of different Age Groups across years**
+```{r echo = FALSE}
+library(streamgraph)
+library(dplyr)
+
+##Chart 2
+
+data2 <- read.csv(file='D:/SUSS/Career/3.5/Private sector/SGH/Data/malaria_deaths_age.csv',sep = ',')
+
+#chart2:trend analysis of incidence rate with age group frm data2
+
+#create data2 dataframe
+data2_df<-as.data.frame(data2)
+
+# Stream graph
+data2_df %>%
+  streamgraph("age_group", "deaths", "year",offset="expand",interpolate="step-after") %>%
+  sg_axis_x(tick_interval=10, tick_units="year") %>% 
+  sg_fill_brewer("PuOr") %>%
+  sg_legend(show=TRUE, label="age_group: ")
+
+```
