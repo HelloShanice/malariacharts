@@ -1,6 +1,5 @@
 ---
 title: "Malaria Insights"
-author: "Shi Yee"
 output: html_document
 ---
 
@@ -29,7 +28,7 @@ names(data1)[4] <- "Deaths"
 names(data1)[5] <- "Continents"
 #View(data1)
 
-###Chart1
+#Chart1
 
 chart1 <- ggplot(data1, aes(x=Year, 
                      y=Deaths, 
@@ -47,7 +46,7 @@ ggplotly(chart1)
 library(streamgraph)
 library(dplyr)
 
-##Chart 2
+#Chart 2
 
 data2 <- read.csv(file='D:/SUSS/Career/3.5/Private sector/SGH/Data/malaria_deaths_age.csv',sep = ',')
 
